@@ -68,12 +68,15 @@ class Matopeli(QGraphicsView):
             x, y = osa
             self.scene().addRect(x * SOLUN_KOKO, y * SOLUN_KOKO, SOLUN_KOKO, SOLUN_KOKO, QPen(Qt.black), QBrush(Qt.black))
         
+        self.scene().addText(f"Pisteet: {self.pisteet}", QFont("Arial",12))
+
+
     def kaynnista_peli(self):
         self.pisteet = 0
         self.suunta = Qt.Key_Right
         self.mato = [(5, 5), (5, 6), (5, 7)]
         self.ruoka = self.lisaa_ruoka()
-        self.timer.start(300)
+        self.timer.start(200)
 
     def lisaa_ruoka(self):
         while True:
