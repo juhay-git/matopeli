@@ -45,19 +45,38 @@ class Matopeli(QGraphicsView):
             uusi_paa = (paa_x, paa_y + 1)
         self.mato.insert(0, uusi_paa)
         
-        self.mato.pop()
+        if uusi_paa == self.ruoka:
+            self.ruoka = self.lisaa_ruoka()
+            self.pisteet += 1
+        else:
+            self.mato.pop()
+        
         self.piirra_peli()
 
     def piirra_peli(self):
         self.scene().clear()
+
+        rx, ry = self.ruoka
+        self.scene().addRect(rx * SOLUN_KOKO, ry * SOLUN_KOKO, SOLUN_KOKO, SOLUN_KOKO, QPen(Qt.black), QBrush(Qt.green))
+
         for osa in self.mato:
             x, y = osa
             self.scene().addRect(x * SOLUN_KOKO, y * SOLUN_KOKO, SOLUN_KOKO, SOLUN_KOKO, QPen(Qt.black), QBrush(Qt.black))
         
     def kaynnista_peli(self):
+        self.pisteet = 0
         self.suunta = Qt.Key_Right
         self.mato = [(5, 5), (5, 6), (5, 7)]
+        self.ruoka = self.lisaa_ruoka()
         self.timer.start(300)
+
+    def lisaa_ruoka(self):
+        while True:
+            x = random.randint(0,RUUDUKON_LEVEYS-1)
+            y = random.randint(0,RUUDUKON_KORKEUS-1)
+
+            if (x,y) not in self.mato:
+                return x,y
 
 def main():
     sovellus = QApplication(sys.argv)
