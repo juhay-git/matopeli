@@ -1,3 +1,4 @@
+# git clone https://github.com/juhay-git/matopeli
 # 'pip install PySide6' tarvitaan 
 import sys
 import random
