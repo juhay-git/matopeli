@@ -15,6 +15,7 @@ class Matopeli(QGraphicsView):
         self.setScene(QGraphicsScene(self))
         self.setRenderHint(QPainter.Antialiasing)
         self.setSceneRect(0, 0, SOLUN_KOKO * RUUDUKON_LEVEYS, SOLUN_KOKO * RUUDUKON_KORKEUS)
+        self.ajastin_viive = 300
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.paivita_peli)
         
@@ -44,7 +45,7 @@ class Matopeli(QGraphicsView):
         elif self.suunta == Qt.Key_Down:
             uusi_paa = (paa_x, paa_y + 1)
         
-        if uusi_paa in self.mato:
+        if uusi_paa in self.mato or not (0<=uusi_paa[0] < RUUDUKON_LEVEYS) or not (0<=uusi_paa[1] < RUUDUKON_KORKEUS):
             self.timer.stop()
             return
         
@@ -53,6 +54,8 @@ class Matopeli(QGraphicsView):
         if uusi_paa == self.ruoka:
             self.ruoka = self.lisaa_ruoka()
             self.pisteet += 1
+            self.ajastin_viive *= 0.90
+            self.timer.setInterval(self.ajastin_viive)
         else:
             self.mato.pop()
         
@@ -76,7 +79,7 @@ class Matopeli(QGraphicsView):
         self.suunta = Qt.Key_Right
         self.mato = [(5, 5), (5, 6), (5, 7)]
         self.ruoka = self.lisaa_ruoka()
-        self.timer.start(200)
+        self.timer.start(self.ajastin_viive)
 
     def lisaa_ruoka(self):
         while True:
